@@ -1,7 +1,7 @@
 # gacha
 适用于[HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot)的可以自动更新的全限定卡池。包含27个限定卡池, 国服日服台服卡池, 以及混合卡池. 仅测试了v2而没有对v1进行测试. 
 
-想法来自[HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot)的一个[Pull Request（#113）](https://github.com/Ice-Cirno/HoshinoBot/pull/113), 但是从其源站获取的卡池是数字ID格式, 于是利用`_pcr_data.py`的数据将其转变为第一个中文名称, 如果遇到角色信息缺失的情况会忽略从角色, 并在控制台显示warning
+想法来自[HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot)的一个[Pull Request（#113）](https://github.com/Ice-Cirno/HoshinoBot/pull/113), 但是从其源站获取的卡池是数字ID格式, 于是利用`_pcr_data.py`的数据将其转变为第一个中文名称, 如果遇到角色信息缺失的情况会忽略该角色, 并在控制台显示warning, 请注意及时更新, 其中ID为1912的角色千炸里脊资源站未找到. 
 
 
 卡池数据更新来源: https://api.redive.lolikon.icu/gacha/default_gacha.json
