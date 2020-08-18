@@ -44,6 +44,12 @@ Gitee地址：https://gitee.com/varmixer/gacha
     ```
 2. 更新卡池后原卡池会被备份至`backup.json`, 如出现错误可由此恢复. 
    
+## 更新日志
+
+### 2020/8/18
+* 解决了使用Hoshino后续版本时, 繁体指令提示冲突的问题
+* 解决了看看UP时出现USE_CQPRO不存在的问题(#1)
+
 ## 本模块原README
 本模块基于 0皆无0（NGA uid=60429400）dalao的[PCR姬器人：可可萝·Android](https://bbs.nga.cn/read.php?tid=18434108)，移植至nonebot框架而成。
 
