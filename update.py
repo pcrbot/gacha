@@ -103,6 +103,11 @@ def update_pool(online_ver):
             if online_pool_name in pool_name[server]:
                 # 仅当命中时才更新卡池, 如果网站删除一个卡池, 更新后不会影响本地卡池
                 local_pool[server] = online_pool[online_pool_name]
+                # 检查UP角色是重复在star3中出现
+                if local_pool[server]['up'] != []:
+                    up_chara_id = local_pool[server]['up'][0]
+                    if up_chara_id in local_pool[server]['star3']:
+                        local_pool[server]['star3'].remove(up_chara_id)
                 # 角色名转id
                 for star in ids_list:
                     local_pool[server][star] = ids2names(local_pool[server][star])
