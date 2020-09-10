@@ -6,3 +6,5 @@ local_ver.json
 # python
 __pycache__/
 
+# 测试文件
+test.py
