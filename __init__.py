@@ -16,11 +16,12 @@ except:
     import json
 
 sv_help = '''
-[妈十连] 转蛋模拟
-[妈来发单抽] 转蛋模拟
-[妈来一井] 4w5钻！
+[@Bot十连] 转蛋模拟
+[@Bot来发单抽] 转蛋模拟
+[@Bot来一井] 4w5钻！
 [查看卡池] 模拟卡池&出率
 [切换卡池] 更换模拟卡池
+[氪金@某人] 为某人氪金, 恢复抽卡次数
 '''.strip()
 sv = Service('gacha', help_=sv_help, bundle='pcr娱乐')
 jewel_limit = DailyNumberLimiter(15000)
@@ -171,12 +172,12 @@ async def gacha_1(bot, ev: CQEvent):
     gid = str(ev.group_id)
     gacha = Gacha(_group_pool[gid])
     chara, hiishi = gacha.gacha_one(gacha.up_prob, gacha.s3_prob, gacha.s2_prob)
-    silence_time = hiishi * 60
+    # silence_time = hiishi * 60
 
     res = f'{chara.name} {"★"*chara.star}'
     res = f'{chara.icon.cqcode} {res}'
 
-    #await silence(ev, silence_time)
+    # await silence(ev, silence_time)
     await bot.send(ev, f'素敵な仲間が増えますよ！\n{res}', at_sender=True)
 
 
@@ -190,7 +191,7 @@ async def gacha_10(bot, ev: CQEvent):
     gid = str(ev.group_id)
     gacha = Gacha(_group_pool[gid])
     result, hiishi = gacha.gacha_ten()
-    silence_time = hiishi * 6 if hiishi < SUPER_LUCKY_LINE else hiishi * 60
+    # silence_time = hiishi * 6 if hiishi < SUPER_LUCKY_LINE else hiishi * 60
 
 
     res1 = chara.gen_team_pic(result[:5], star_slot_verbose=False)
