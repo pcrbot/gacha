@@ -7,7 +7,7 @@ import hoshino,nonebot
 
 sv_update = Service('gacha-update',visible=False,enable_on_default=True,manage_priv=priv.SUPERUSER)
 
-NOTICE = 1  # 卡池更新完成时不需要提醒的, 可以把这里改成0
+NOTICE = 0  # 卡池更新完成时不需要提醒的, 可以把这里改成0
 
 local_ver_path = './hoshino/modules/priconne/gacha/local_ver.json'
 local_pool_path = './hoshino/modules/priconne/gacha/config.json'
