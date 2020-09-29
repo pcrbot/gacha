@@ -1,11 +1,15 @@
-# -*- coding: utf-8 -*-  #声明编码
-import os, json, requests
-from .. import _pcr_data
-from nonebot import on_command
-from hoshino import priv,Service
-import hoshino,nonebot
+# -*- coding: utf-8 -*-
+from nonebot import on_command, get_bot, scheduler
+from hoshino import aiorequests, priv
 
-sv_update = Service('gacha-update',visible=False,enable_on_default=True,manage_priv=priv.SUPERUSER)
+import hoshino
+import os, json
+
+from .. import _pcr_data
+
+from hoshino import priv
+
+
 
 NOTICE = 0  # 卡池更新完成时不需要提醒的, 可以把这里改成0
 
@@ -17,7 +21,7 @@ online_ver_url = 'https://api.redive.lolikon.icu/gacha/gacha_ver.json'
 online_pool_url = 'https://api.redive.lolikon.icu/gacha/default_gacha.json'
 
 
-def ids2names(ids:list):
+def ids2names(ids:list) -> list:
     '''
     根据ID转换为官方译名,为了与现行卡池兼容
     '''
@@ -29,7 +33,7 @@ def ids2names(ids:list):
             hoshino.logger.warning(f'缺少角色{id}的信息, 请注意更新静态资源')
     return res
 
-def check_ver():
+async def check_ver():
     '''
     检查版本, 返回版本号说明需要更新, 返回False不需要更新, 其他返回值则是HTTP状态码 \n
     并不会对本地文件做出任何修改
@@ -45,15 +49,15 @@ def check_ver():
     hoshino.logger.info(f'检查卡池更新, 本地卡池版本{local_ver}')
     # 获取在线版本号
     try:
-        ovj = requests.get(online_ver_url,timeout=10)
+        ovj = await aiorequests.get(url=online_ver_url, timeout=10)
     except Exception as e:
         hoshino.logger.error(f'获取在线版本号时发生错误{type(e)}')
         return type(e)
         
-    
     if ovj.status_code != 200:
         return ovj.status_code
-    online_ver = int(ovj.json()["ver"])
+    ovj_json = await ovj.json()
+    online_ver = int(ovj_json["ver"])
     
     hoshino.logger.info(f'检查卡池更新, 在线卡池版本{online_ver}')
     if online_ver > local_ver:
@@ -63,7 +67,7 @@ def check_ver():
         hoshino.logger.info(f'未检测到新版本卡池,无需更新')
         return 0
 
-def update_pool(online_ver):
+async def update_pool(online_ver) -> int:
     '''
     直接从API处获取在线卡池以及版本, 并覆盖到本地, 检测更新函数check_ver()中 
     传入参数是为了减少掉用次数
@@ -72,11 +76,11 @@ def update_pool(online_ver):
 
     # 获取在线卡池
     hoshino.logger.info(f'开始获取在线卡池')
-    online_pool_f = requests.get(online_pool_url,timeout = 10)
+    online_pool_f = await aiorequests.get(online_pool_url,timeout = 10)
     if online_pool_f.status_code != 200:
         hoshino.logger.error(f'获取在线卡池时发生错误{online_pool_f.status_code}')
         return online_pool_f.status_code
-    online_pool = online_pool_f.json()
+    online_pool = await online_pool_f.json()
 
     # 读取本地默认卡池
     with open(local_pool_path,'r',encoding='utf-8') as lf:
@@ -130,14 +134,14 @@ def update_pool(online_ver):
     return 0
 
 
-@on_command('更新卡池',only_to_me=False)
+@on_command('更新卡池', only_to_me=False)
 async def demo_chat(session):
     '''
     强制更新卡池时试用此命令
     '''
-    if not priv.check_priv(session.event,priv.SUPERUSER):
+    if not priv.check_priv(session.event, priv.SUPERUSER):
         return
-    online_ver = check_ver()
+    online_ver = await check_ver()
     if type(online_ver) != int:
         await session.finish(f'检查版本发生错误{type(online_ver)}')
     if not online_ver:
@@ -147,14 +151,14 @@ async def demo_chat(session):
         # 版本号比这个大多了！
         await session.finish(f'检查版本发生错误{online_ver}')
 
-    result = update_pool(online_ver)
+    result = await update_pool(online_ver)
     if result:
         await session.finish(f'更新过程中发生错误{result}')
     await session.finish(f'更新完成, 当前卡池版本号{online_ver}')
     
-@sv_update.scheduled_job('cron',hour='16',minute='3')
+@scheduler.scheduled_job('cron',hour='16',minute='3')
 async def update_gacha_sdj():
-    bot = nonebot.get_bot()
+    bot = get_bot()
     master_id = hoshino.config.SUPERUSERS[0]
 
     self_ids = bot._wsr_api_clients.keys()
@@ -162,10 +166,10 @@ async def update_gacha_sdj():
         # 获取机器人自身ID
         sid = id
 
-    online_ver = check_ver()
+    online_ver = await check_ver()
     if type(online_ver) != int and NOTICE:
         msg = f'检查版本发生错误{type(online_ver)}'
-        await bot.send_private_msg(seld_id = sid,user_id=master_id, message=msg)
+        await bot.send_private_msg(seld_id=sid, user_id=master_id, message=msg)
         return
     if not online_ver:
         # 返回0则卡池最新
@@ -174,16 +178,16 @@ async def update_gacha_sdj():
     if online_ver < 1000 and NOTICE:
         # 版本号比这个大多了！
         msg = f'检查版本发生错误{online_ver}'
-        await bot.send_private_msg(seld_id = sid,user_id=master_id, message=msg)
+        await bot.send_private_msg(seld_id=sid, user_id=master_id, message=msg)
         return
 
-    result = update_pool(online_ver)
+    result = await update_pool(online_ver)
     if result and NOTICE:
         msg = f'更新过程中发生错误{result}'
-        await bot.send_private_msg(seld_id = sid,user_id=master_id, message=msg)
+        await bot.send_private_msg(seld_id=sid, user_id=master_id, message=msg)
         return
 
     
     if NOTICE: 
         msg = f'更新完成, 当前卡池版本号{online_ver}'      
-        await bot.send_private_msg(seld_id = sid,user_id=master_id, message=msg)
+        await bot.send_private_msg(seld_id=sid, user_id=master_id, message=msg)

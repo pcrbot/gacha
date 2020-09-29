@@ -21,13 +21,13 @@ Gitee地址：https://gitee.com/varmixer/gacha
 
 
 ## 开始使用
-### 如果您已经在使用全限定卡池
+### 如果您已经在使用全限定卡池或只需要自动更新功能
 1. 克隆本项目, 复制`update.py`文件到HoshinoBot的抽卡模块目录下, 例如`~/HoshinoBot/hoshino/modules/priconne/gacha/`, 请根据实际情况修改路径.
 2. 修改`gacha/`目录下的`__init__.py`文件, 在任意位置添加以下内容(推荐在代码开头部分)
     ```
     from .update import *
     ```
-3. 发送命令“更新卡池”来进行一次强制更新, 此更新仅修改卡池配置文件`config.json`中的四个对应卡池而不会修改其他限定池内容.(但是排版会被格式化)
+3. 发送命令“更新卡池”来进行一次强制更新, 此更新仅修改卡池配置文件`config.json`中的四个对应卡池(MIX, JP, TW, BL)而不会修改其他限定池内容.(但是排版会被格式化)
 ### 如果您未使用过全限定卡池
 1. 切换至PCR模块目录下(请自行根据实际情况修改路径):
    ```
@@ -37,20 +37,25 @@ Gitee地址：https://gitee.com/varmixer/gacha
    ```
    rm gacha/ -r 
    ```
-3. 克隆本项目:
+3. 在同目录下克隆本项目, 保证目录结构与原来一致, 即`/hoshino/modules/priconne/gacha/`:
    ```
    git clone https://github.com/pcrbot/gacha.git
    ```
 4. 重新启动机器人
 
 ## 其他
-1. 自动更新出现错误或者是发现新卡池而完成自动更新, 会通知SUPERUSER列表的第一名用户, 如果您不想接受到通知, 可以将`update.py`第10行改为:
+1. 自动更新出现错误或者是发现新卡池而完成自动更新, 可通知SUPERUSER列表的第一名用户, 如果您想接受到通知, 可以将`update.py`第10行改为:
     ```
-    NOTICE = 0
+    NOTICE = 1
     ```
 2. 更新卡池后原卡池会被备份至`backup.json`, 如出现错误可由此恢复. 
    
 ## 更新日志
+
+### 2020/9/29
+* 所有请求全部替换为异步调用(使用`hoshino.aiorequests`)
+* 定时任务改为`nonebot.scheduler`来触发, 不再依赖hoshino服务层
+
 
 ### 2020/9/10
 * 更新了部分游骑兵相关角色名称 [#7](https://github.com/pcrbot/gacha/issues/7)
