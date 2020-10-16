@@ -41,10 +41,7 @@ async def get_online_pcrdata():
     # 移除开头的'CHARA_NAME = ', 格式化为json便于处理
     online_pcrdata_text = await online_pcrdata.text
     online_pcrdata_text = online_pcrdata_text.replace('CHARA_NAME = ', '')
-    #print(type(online_pcrdata_text))
     online_pcrdata_json = literal_eval(online_pcrdata_text)
-    print(online_pcrdata_json)
-    print(type(online_pcrdata_json))
     return online_pcrdata_json
 
 
