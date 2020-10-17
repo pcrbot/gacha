@@ -56,7 +56,7 @@ async def update_pcrdata() -> int:
     if online_pcrdata == {}:
         return -1
     for id in online_pcrdata:
-        if id not in _pcr_data.CHARA_NAME:
+        if id not in _pcr_data.CHARA_NAME and id != 9401:
             reload_need = True
             hoshino.logger.info(f'已开始更新角色{id}的数据和图标')
             # 由于返回数据可能出现全半角重复, 做一定程度的兼容性处理, 会将所有全角替换为半角, 并移除重复别称
@@ -72,6 +72,10 @@ async def update_pcrdata() -> int:
             download_chara_icon(id, 3)
             download_chara_icon(id, 1)
     
+    # 移除之前アメス的角色ID9401
+    if 9401 in _pcr_data.CHARA_NAME:
+        del _pcr_data.CHARA_NAME[9401]
+
     # 写入新的角色数据
     new_pcrdata = str(_pcr_data.CHARA_NAME)
     write_str = 'CHARA_NAME = ' + new_pcrdata
