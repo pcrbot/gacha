@@ -1,6 +1,8 @@
 # gacha
 适用于[HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot)的可以自动更新的全限定卡池。包含27个限定卡池, 国服日服台服卡池, 以及混合卡池. 仅测试了v2而没有对v1进行测试. 本卡池默认不会禁言, 抽卡需要@Bot, 如果有需要请自行修改. 
 
+**暂不支持最新[HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot/commit/2c3e0bd5b19328573d915ed2cef206cbd7a19d74), 如果您的`_pcr_data.py`包含了`CHARA_PROFILE `，则面临角色数据被覆盖的问题**
+
 请注意, 咖啡佬在8月5日提交了一次针对角色名称的修改[b256942](https://github.com/Ice-Cirno/HoshinoBot/commit/7cfa868ec7d6f777ab608b77743af32d34add551#diff-7cb6cbc27352fcca4672d1966d984863),将"游骑兵"更换为了"游侠", 如果您部署的时间早于此时间, 请注意更新角色名称.（[#7](https://github.com/pcrbot/gacha/issues/7)）
 
 想法来自[HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot)的[#113](https://github.com/Ice-Cirno/HoshinoBot/pull/113), 但是从其源站获取的卡池是数字ID格式, 于是利用`_pcr_data.py`的数据将其转变为第一个中文名称, 更新卡池后原卡池会被备份至`backup.json`, 如出现错误可由此恢复. 
