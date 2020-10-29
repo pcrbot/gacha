@@ -288,7 +288,7 @@ async def update_pool_sdj():
     bot = get_bot()
     master_id = hoshino.config.SUPERUSERS[0]
 
-    self_ids = bot._wsr_api_clients.keys()
+    self_ids = list(bot._wsr_api_clients)
     sid = self_ids[0]
 
     status = await update_pool()
