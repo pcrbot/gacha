@@ -86,10 +86,9 @@ async def update_pcrdata() -> int:
     write_str = write_str.replace('     ', '    ')
     write_str = write_str.replace(', \n', ',\n')
 
-    with open(local_pcrdata_path, 'w+', encoding='utf-8') as f:
-        f.write(write_str)
-    
     if reload_need:
+        with open(local_pcrdata_path, 'w+', encoding='utf-8') as f:
+            f.write(write_str)
         hoshino.logger.info('角色数据已成功更新, 正在重载')
         if CHARA_RELOAD:
             try:
