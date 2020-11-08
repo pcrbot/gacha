@@ -1,4 +1,3 @@
-import hoshino
 import os
 import json
 
@@ -48,7 +47,7 @@ class CharaMaster:
 
     def check_nickname(self, id:int, nickname:str):
         '''
-        Return true if id already existed.
+        Return true if nickname already existed.
         '''
         if id not in CHARA_NAME:
             return None
@@ -64,9 +63,6 @@ class CharaMaster:
 
 
     def add_nickname(self, id:int, nickname:str) -> None:
-        '''
-        add nickname to character
-        '''
         CHARA_NAME[id].append(nickname)
         self.__save_pcr_data()
 
