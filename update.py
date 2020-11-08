@@ -14,15 +14,13 @@ NOTICE = False
 
 
 # 是否自动更新缺失的角色数据并下载图标, 是否重载花名册
-# 注意此项目会修改_pcr_data.py, 如果您指定了use_reloader=True, 则修改花名册时会自动重载全部代码, 请配置CHARA_RELOAD为False
 # 此选项会使您的仓库存在未提交的修改, 如果有影响请注意处理
 PCRDATA_UPDATA = True
-CHARA_RELOAD = True 
 
-local_ver_path = './hoshino/modules/priconne/gacha/local_ver.json'
-local_pool_path = './hoshino/modules/priconne/gacha/config.json'
-local_pool_backup_path = './hoshino/modules/priconne/gacha/backup.json'
-local_pcrdata_path = './hoshino/modules/priconne/_pcr_data.py'
+local_ver_path = os.path.join(os.path.dirname(__file__), 'local_ver.json')
+local_pool_path = os.path.join(os.path.dirname(__file__), 'config.json')
+local_pool_backup_path = os.path.join(os.path.dirname(__file__), 'backup.json')
+
 
 online_ver_url = 'https://api.redive.lolikon.icu/gacha/gacha_ver.json'
 online_pool_url = 'https://api.redive.lolikon.icu/gacha/default_gacha.json'
@@ -45,11 +43,10 @@ async def get_online_pcrdata():
     return online_pcrdata_json
 
 
-async def update_pcrdata() -> int:
+async def update_pcrdata():
     '''
     对比本地和远程的_pcr_data.py, 自动补充本地没有的角色信息, 已有角色信息不受影响
     '''
-    reload_need = False
     online_pcrdata = await get_online_pcrdata()
     
     hoshino.logger.info('开始对比角色数据')
@@ -57,7 +54,6 @@ async def update_pcrdata() -> int:
         return -1
     for id in online_pcrdata:
         if id not in _pcr_data.CHARA_NAME and id != 9401:
-            reload_need = True
             hoshino.logger.info(f'已开始更新角色{id}的数据和图标')
             # 由于返回数据可能出现全半角重复, 做一定程度的兼容性处理, 会将所有全角替换为半角, 并移除重复别称
             for i, name in enumerate(online_pcrdata[id]):
@@ -67,38 +63,12 @@ async def update_pcrdata() -> int:
 
             # 转集合再转列表, 移除重复元素
             online_pcrdata[id] = list(set(online_pcrdata[id]))
-            _pcr_data.CHARA_NAME[id] = online_pcrdata[id]
+            _pcr_data.chara_master.add_chara(id, online_pcrdata[id])
             download_chara_icon(id, 6)
             download_chara_icon(id, 3)
             download_chara_icon(id, 1)
-    
-    # 移除之前アメス的角色ID9401
-    if 9401 in _pcr_data.CHARA_NAME:
-        del _pcr_data.CHARA_NAME[9401]
-
-    # 写入新的角色数据
-    new_pcrdata = str(_pcr_data.CHARA_NAME)
-    write_str = 'CHARA_NAME = ' + new_pcrdata
-    # 使用自定义的格式化, indent=4格式化出来后很长......
-    write_str = write_str.replace('{', '{\n    ')
-    write_str = write_str.replace('}', '\n}\n')
-    write_str = write_str.replace('],', '],\n    ')
-    write_str = write_str.replace('     ', '    ')
-    write_str = write_str.replace(', \n', ',\n')
-
-    if reload_need:
-        with open(local_pcrdata_path, 'w+', encoding='utf-8') as f:
-            f.write(write_str)
-        hoshino.logger.info('角色数据已成功更新, 正在重载')
-        if CHARA_RELOAD:
-            try:
-                roster.update()
-            except Exception as e:
-                hoshino.logger.exception(f'重载花名册时发生错误{e}')
-        else:
-            hoshino.logger.info('等待reloader......')
-        return 1
-    return 0
+    # 重载花名册(不会引起全局reload)
+    roster.update()
 
 
 def ids2names(ids: list) -> list:
@@ -282,7 +252,7 @@ async def update_pool_force_chat(session):
         await session.finish(f'更新完成, 当前卡池版本{status}')
 
 
-@scheduler.scheduled_job('cron', hour='4', minute='32')
+@scheduler.scheduled_job('cron', hour='17', minute='05')
 async def update_pool_sdj():
     bot = get_bot()
     master_id = hoshino.config.SUPERUSERS[0]
