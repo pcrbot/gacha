@@ -10,7 +10,7 @@ from .. import _pcr_data
 from ..chara import download_chara_icon, roster
 
 # 卡池更新是否通知管理员
-NOTICE = True  
+NOTICE = False 
 
 
 # 是否自动更新缺失的角色数据并下载图标, 是否重载花名册
