@@ -62,7 +62,7 @@ async def gacha_info(bot, ev: CQEvent):
     await bot.send(ev, f"本期卡池主打的角色：\n{up_chara}\nUP角色合计={(gacha.up_prob/10):.1f}% 3★出率={(gacha.s3_prob)/10:.1f}%\n")
 
 
-POOL_NAME_TIP = '请选择以下卡池\n> 选择卡池 jp\n> 选择卡池 tw\n> 选择卡池 bilibili\n> 选择卡池 fes\n> 选择卡池 七冠\n> 选择卡池 联动\n> 选择卡池 限定（现已全部实装）\n> 选择卡池 mix'
+POOL_NAME_TIP = '请选择以下卡池\n> 选择卡池 jp\n> 选择卡池 tw\n> 选择卡池 bilibili\n> 选择卡池 mix'
 @sv.on_prefix(('切换卡池', '选择卡池'))
 async def set_pool(bot, ev: CQEvent):
     #if not priv.check_priv(ev, priv.ADMIN):
@@ -78,70 +78,6 @@ async def set_pool(bot, ev: CQEvent):
         name = 'TW'
     elif name in ('日', '日服', 'jp', 'cy', 'cygames'):
         name = 'JP'
-    elif name in ('fes', '盛典'):
-        name = 'FES'
-    elif name in ('七冠', 'セブンクラウンズ'):
-        name = 'セブンクラウンズ'    
-    elif name in ('联动', '活动'):
-        await bot.finish(ev,'请选择以下卡池\n> 选择卡池 re0\n> 选择卡池 偶像大师')
-    elif name in ('RE:0联动', 're0联动', 're0'):
-        name = 're0'
-    elif name in ('偶像大师联动', '偶像大师活动', '偶像大师'):
-        name = '偶像大师'
-    elif name in ('限定'):
-        await bot.finish(ev,'请选择以下卡池\n> 选择卡池 泳装限定\n> 选择卡池 万圣限定\n> 选择卡池 圣诞限定\n> 选择卡池 春节限定\n> 选择卡池 情人节限定')
-    elif name in ('泳装限定'):
-        await bot.finish(ev,'请选择以下卡池\n> 选择卡池 泳装佩可\n> 选择卡池 泳装铃莓\n> 选择卡池 泳装凯露\n> 选择卡池 泳装珠希\n> 选择卡池 泳装铃奈\n> 选择卡池 泳装咲恋\n> 选择卡池 泳装真琴\n> 选择卡池 泳装真步\n> 选择卡池 泳装流夏')
-    elif name in ('泳装佩可', '泳装吃货', '水吃'):
-        name = '泳裝-佩可'
-    elif name in ('泳装铃莓', '泳装女仆', '水女仆'):
-        name = '泳裝-鈴莓'
-    elif name in ('泳装凯露', '泳装黑猫', '水黑'):
-        name = '泳裝-凱留'
-    elif name in ('泳装珠希', '泳装猫剑', '水猫剑'):
-        name = '泳裝-珠希'
-    elif name in ('泳装铃奈', '泳装暴击弓', '水暴', '瀑'):
-        name = '泳裝-鈴奈'
-    elif name in ('泳装咲恋', '泳装充电宝', '水电'):
-        name = '泳裝-咲戀'
-    elif name in ('泳装真琴', '泳装狼', '水狼', '浪'):
-        name = '泳裝-真琴'
-    elif name in ('泳装真步', '泳装狐狸', '水狐', '水壶'):
-        name = '泳裝-真步'
-    elif name in ('泳装流夏', '泳装大姐头', '水流夏', '水大姐头'):
-        name = '泳裝-流夏'
-    elif name in ('泳装纯', '泳装黑骑','水纯'):
-        name = '泳裝-纯'
-    elif name in ('万圣限定'):
-        await bot.finish(ev,'请选择以下卡池\n> 选择卡池 万圣忍\n> 选择卡池 万圣美咲\n> 选择卡池 万圣小仓唯')
-    elif name in ('万圣忍', '瓜忍'):
-        name = '萬聖節-忍'
-    elif name in ('万圣美咲', '万圣大眼', '瓜眼'):
-        name = '萬聖節-美咲'
-    elif name in ('万圣小仓唯', 'mcw', '猫唯'):
-        name = '萬聖節-鏡華'
-    elif name in ('圣诞限定'):
-        await bot.finish(ev,'请选择以下卡池\n> 选择卡池 圣诞千歌\n> 选择卡池 圣诞绫音\n> 选择卡池 圣诞克里斯蒂娜')
-    elif name in ('圣诞千歌', '圣千'):
-        name = '聖誕節-千歌'
-    elif name in ('圣诞绫音', '圣诞熊锤'):
-        name = '聖誕節-綾音'
-    elif name in ('圣诞克里斯蒂娜', '圣克', '蛋壳'):
-        name = '聖誕節-克莉絲蒂娜'
-    elif name in ('春节限定'):
-        await bot.finish(ev,'请选择以下卡池\n> 选择卡池 新年优衣\n> 选择卡池 新年日和\n> 选择卡池 正月凯露\n> 选择卡池 正月可可萝')
-    elif name in ('新年优衣', '春田'):
-        name = '新年-優衣'
-    elif name in ('新年日和', '春猫'):
-        name = '新年-日和'
-    elif name in ('正月凯露', '春黑', '唯一的神'):
-        name = '正月-凱留'
-    elif name in ('正月可可萝', '春妈'):
-        name = '正月-可可蘿'
-    elif name in ('情人节限定'):
-        await bot.finish(ev,'请选择以下卡池\n> 选择卡池 情人节静流')
-    elif name in ('情人节静流', '情姐'):
-        name = '情人節-靜流'
     elif name in ('混', '混合', 'mix'):
         name = 'MIX'
     else:

@@ -10,7 +10,7 @@ from .. import _pcr_data
 from ..chara import download_chara_icon, roster
 
 # 卡池更新是否通知管理员
-NOTICE = False  
+NOTICE = True  
 
 
 # 是否自动更新缺失的角色数据并下载图标, 是否重载花名册
@@ -22,9 +22,9 @@ local_pool_path = os.path.join(os.path.dirname(__file__), 'config.json')
 local_pool_backup_path = os.path.join(os.path.dirname(__file__), 'backup.json')
 
 
-online_ver_url = 'https://api.redive.lolikon.icu/gacha/gacha_ver.json'
-online_pool_url = 'https://api.redive.lolikon.icu/gacha/default_gacha.json'
-online_pcr_data_url = 'https://api.redive.lolikon.icu/gacha/unitdata.py'
+online_ver_url = 'https://raw.githubusercontent.com/pcrbot/pcr-info/master/gacha/gacha_ver.json'
+online_pool_url = 'https://raw.githubusercontent.com/pcrbot/pcr-info/master/gacha/hoshino.json'
+online_pcr_data_url = 'https://raw.githubusercontent.com/pcrbot/pcr-info/master/nickname/unitdata.py'
 
 
 async def get_online_pcrdata():
