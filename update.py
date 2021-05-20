@@ -197,13 +197,13 @@ async def update_pool(force=False) -> int:
     # 获取远程卡池
     online_pool = await get_online_pool()
     if type(online_pool) == int:
-        hoshino.error(f'获取在线卡池时发生错误{online_pool}')
+        hoshino.logger.error(f'获取在线卡池时发生错误{online_pool}')
         return online_pool
 
     # 获取远程版本号
     online_ver = await get_online_ver()
     if online_ver < 1000:
-        hoshino.error(f'获取在线卡池版本时发生错误{online_ver}')
+        hoshino.logger.error(f'获取在线卡池版本时发生错误{online_ver}')
         return online_ver
 
     # 比较本地版本号
