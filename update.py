@@ -2,7 +2,7 @@
 from os import stat
 from nonebot import on_command, get_bot, scheduler
 from requests.sessions import session
-from hoshino import aiorequests, priv
+from hoshino import aiorequests, priv, util
 from ast import literal_eval
 import hoshino
 import os, json
@@ -59,6 +59,7 @@ async def update_pcrdata():
             for i, name in enumerate(online_pcrdata[id]):
                 name_format = name.replace('（', '(')
                 name_format = name_format.replace('）', ')')
+                name_format = util.normalize_str(name_format)
                 online_pcrdata[id][i] = name_format
 
             # 转集合再转列表, 移除重复元素
