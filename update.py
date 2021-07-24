@@ -69,9 +69,12 @@ async def update_pcrdata():
                 name_format = name_format.replace('）', ')')
                 name_format = util.normalize_str(name_format)
                 online_pcrdata[id][i] = name_format
-                n = online_pcrdata[id][0]
+                if len(online_pcrdata[id]) != 1:
+                    n = online_pcrdata[id][1]
+                else:
+                    n = online_pcrdata[id][0]
                 group = {f'{n}'}
-            # 转集合再转列表, 移除重复元素, 按日文原名优先顺序排列
+            # 转集合再转列表, 移除重复元素, 按中文原名优先顺序排列
             m = list(set(online_pcrdata[id]))
             sort_priority(m, group)
             _pcr_data.chara_master.add_chara(id, m)
