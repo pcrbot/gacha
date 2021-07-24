@@ -43,17 +43,25 @@ async def get_online_pcrdata():
     return online_pcrdata_json
 
 
+def sort_priority(values, group):
+    def helper(x):
+        if x in group:
+            return (0, x)
+        return(1, x)
+    values.sort(key=helper)
+
+
 async def update_pcrdata():
     '''
-    对比本地和远程的_pcr_data.py, 自动补充本地没有的角色信息, 已有角色信息不受影响
+    对比本地和远程的_pcr_data.py, 自动补充本地没有的角色信息, 已有角色信息进行补全
     '''
     online_pcrdata = await get_online_pcrdata()
-    
     hoshino.logger.info('开始对比角色数据')
     if online_pcrdata == {}:
         return -1
     for id in online_pcrdata:
-        if id not in _pcr_data.CHARA_NAME and id != 9401:
+        # 增加对只有一个key的名字的检查，从而更新之前检查所添加的没有别称的新角色
+        if (id not in _pcr_data.CHARA_NAME or len(_pcr_data.CHARA_NAME[id]) == 1) and id != 9401:
             hoshino.logger.info(f'已开始更新角色{id}的数据和图标')
             # 由于返回数据可能出现全半角重复, 做一定程度的兼容性处理, 会将所有全角替换为半角, 并移除重复别称
             for i, name in enumerate(online_pcrdata[id]):
@@ -61,10 +69,12 @@ async def update_pcrdata():
                 name_format = name_format.replace('）', ')')
                 name_format = util.normalize_str(name_format)
                 online_pcrdata[id][i] = name_format
-
-            # 转集合再转列表, 移除重复元素
-            online_pcrdata[id] = list(set(online_pcrdata[id]))
-            _pcr_data.chara_master.add_chara(id, online_pcrdata[id])
+                n = online_pcrdata[id][0]
+                group = {f'{n}'}
+            # 转集合再转列表, 移除重复元素, 按日文原名优先顺序排列
+            m = list(set(online_pcrdata[id]))
+            sort_priority(m, group)
+            _pcr_data.chara_master.add_chara(id, m)
             download_chara_icon(id, 6)
             download_chara_icon(id, 3)
             download_chara_icon(id, 1)
