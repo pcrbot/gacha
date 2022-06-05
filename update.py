@@ -165,10 +165,10 @@ def update_local_pool(online_pool) -> None:
     ids_list = ['up', 'star3', 'star2', 'star1']
     # 服务器名称可能的键
     pool_name = {
-        'BL': ['BL', 'bl', 'Bl', 'bL', 'CN', 'cn'],
-        'TW': ['TW', 'tw', 'so-net', 'sonet'],
-        'JP': ['JP', 'jp'],
-        'MIX': ['MIX', 'mix', 'Mix', 'All', 'all', 'ALL']
+        '国服': ['BL', 'bl', 'Bl', 'bL', 'CN', 'cn'],
+        '台服': ['TW', 'tw', 'so-net', 'sonet'],
+        '日服': ['JP', 'jp'],
+        '混合': ['MIX', 'mix', 'Mix', 'All', 'all', 'ALL']
     }
 
     for server in pool_name:
