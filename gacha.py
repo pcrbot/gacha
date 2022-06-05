@@ -6,12 +6,20 @@ from .. import chara
 
 class Gacha(object):
 
-    def __init__(self, pool_name:str="cn"):
+    def __init__(self, pool_name: str = "混合"):
         super().__init__()
+        self.pool_name = pool_name
+        if pool_name == '国服' or pool_name == '桥本环奈' or pool_name == 'Re：从零开始的异世界生活' or pool_name == '偶像大师 灰姑娘女孩 星光舞台' or pool_name == '贪吃佩可(夏日)' or pool_name == '铃莓(夏日)' or pool_name == '凯留(夏日)' or pool_name == '珠希(夏日)' or pool_name == '铃奈(夏日)' or pool_name == '咲恋(夏日)' or pool_name == '真琴(夏日)' or pool_name == '真步(夏日)' or pool_name == '流夏(夏日)' or pool_name == '初音(夏日)' or pool_name == '忍(万圣节)' or pool_name == '美咲(万圣节)' or pool_name == '镜华(万圣节)' or pool_name == '纺希(万圣节)' or pool_name == '千歌(圣诞节)' or pool_name == '绫音(圣诞节)' or pool_name == '克莉丝提娜(圣诞节)' or pool_name == '秋乃(圣诞节)' or pool_name == '优衣(新年)' or pool_name == '日和(新年)' or pool_name == '凯留(新年)' or pool_name == '可可萝(新年)' or pool_name == '贪吃佩可(新年)' or pool_name == '似似花(新年)' or pool_name == '静流(情人节)' or pool_name == '可可萝(祭服)':
+            self.tenjou_line = 300
+            self.tenjou_rate = '12.16%'
+        else:
+            self.tenjou_line = 200
+            self.tenjou_rate = '24.54%'
+        self.memo_pieces = 200 if (pool_name == '混合' or pool_name == '日服' or pool_name == '台服' or pool_name == '公主祭典(Fes)' or pool_name == '七冠(セブンクラウンズ)' or pool_name == '步未(怪盗)') else 100
         self.load_pool(pool_name)
 
 
-    def load_pool(self, pool_name:str):
+    def load_pool(self, pool_name: str):
         config = util.load_config(__file__)
         pool = config[pool_name]
         self.up_prob = pool["up_prob"]
@@ -24,7 +32,7 @@ class Gacha(object):
         self.star1 = pool["star1"]
 
 
-    def gacha_one(self, up_prob:int, s3_prob:int, s2_prob:int, s1_prob:int = None):
+    def gacha_one(self, up_prob: int, s3_prob: int, s2_prob: int, s1_prob: int = None):
         '''
         sx_prob: x星概率，要求和为1000
         up_prob: UP角色概率（从3星划出）
@@ -69,13 +77,14 @@ class Gacha(object):
 
 
     def gacha_tenjou(self):
+        total_div_10 = self.tenjou_line // 10
         result = {'up': [], 's3': [], 's2':[], 's1':[]}
         first_up_pos = 999999
         up = self.up_prob
         s3 = self.s3_prob
         s2 = self.s2_prob
         s1 = 1000 - s3 - s2
-        for i in range(9 * 30):
+        for i in range(9 * total_div_10):
             c, y = self.gacha_one(up, s3, s2, s1)
             if 100 == y:
                 result['up'].append(c)
@@ -88,7 +97,7 @@ class Gacha(object):
                 result['s1'].append(c)
             else:
                 pass    # should never reach here
-        for i in range(30):
+        for i in range(total_div_10):
             c, y = self.gacha_one(up, s3, s2 + s1, 0)
             if 100 == y:
                 result['up'].append(c)
