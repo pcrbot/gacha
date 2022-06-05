@@ -58,6 +58,10 @@ Gitee地址：https://gitee.com/varmixer/gacha
 
 ## 更新日志
 
+### 2022/6/5
+* 更新卡池信息（全新安装的用户首次运行时请发送【更新卡池】）
+* 合并咖啡佬的200井代码
+
 ### 2020/11/9
 * 将角色信息全部给改为json文件存储, 在启动时读取, 并且加入了动态改变角色昵称的方法， 从而在更新角色数据时不会触发全局热重载
 * 兼容最新版[HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot), 包含了`CHARA_PROFILE`
