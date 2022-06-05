@@ -53,7 +53,10 @@ gacha_300_aliases = ('抽一井', '来一井', '来发井', '抽发井', '天井
 @sv.on_fullmatch(('卡池资讯', '查看卡池', '看看卡池', '康康卡池', '看看up', '看看UP'))
 async def gacha_info(bot, ev: CQEvent):
     gid = str(ev.group_id)
-    gacha = Gacha(_group_pool[gid])
+    try:
+        gacha = Gacha(_group_pool[gid])
+    except:
+        await bot.finish(ev, f'未知卡池，{POOL_NAME_TIP}', at_sender=True)
     up_chara = gacha.up
     up_chara = map(lambda x: str(
         chara.fromname(x, star=3).icon.cqcode) + x, up_chara)
@@ -199,7 +202,10 @@ async def gacha_1(bot, ev: CQEvent):
     jewel_limit.increase(ev.user_id, 150)
 
     gid = str(ev.group_id)
-    gacha = Gacha(_group_pool[gid])
+    try:
+        gacha = Gacha(_group_pool[gid])
+    except:
+        await bot.finish(ev, f'未知卡池，{POOL_NAME_TIP}', at_sender=True)
     chara, hiishi = gacha.gacha_one(gacha.up_prob, gacha.s3_prob, gacha.s2_prob)
     # silence_time = hiishi * 60
 
@@ -218,7 +224,10 @@ async def gacha_10(bot, ev: CQEvent):
     jewel_limit.increase(ev.user_id, 1500)
 
     gid = str(ev.group_id)
-    gacha = Gacha(_group_pool[gid])
+    try:
+        gacha = Gacha(_group_pool[gid])
+    except:
+        await bot.finish(ev, f'未知卡池，{POOL_NAME_TIP}', at_sender=True)
     result, hiishi = gacha.gacha_ten()
     # silence_time = hiishi * 6 if hiishi < SUPER_LUCKY_LINE else hiishi * 60
 
@@ -247,7 +256,10 @@ async def gacha_300(bot, ev: CQEvent):
     tenjo_limit.increase(ev.user_id)
 
     gid = str(ev.group_id)
-    gacha = Gacha(_group_pool[gid])
+    try:
+        gacha = Gacha(_group_pool[gid])
+    except:
+        await bot.finish(ev, f'未知卡池，{POOL_NAME_TIP}', at_sender=True)
     result = gacha.gacha_tenjou()
     up = len(result['up'])
     s3 = len(result['s3'])
