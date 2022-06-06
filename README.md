@@ -41,13 +41,14 @@ Gitee地址：https://gitee.com/varmixer/gacha
    ```
    git clone https://github.com/pcrbot/gacha.git
    ```
-4. 移动文件`_pcr_data.py`、`CHARA_NAME.json`、`CHARA_PROFILE.json`到上级目录, 注意需要让`_pcr_data.py`覆盖原来的文件, 此修改与项目的其他插件完全兼容, 仅是修改了数据的保存方式, 因此无需担心（出问题我跑路）
+4. 移动文件`_pcr_data.py`、`CHARA_NAME.json`、`CHARA_PROFILE.json`、`UnavailableChara.json`到上级目录, 注意需要让`_pcr_data.py`覆盖原来的文件, 此修改与项目的其他插件完全兼容, 仅是修改了数据的保存方式, 因此无需担心（出问题我跑路）
    ```
    cd gacha/
    # 提示覆盖请确认覆盖文件
    mv _pcr_data.py ..
    mv CHARA_NAME.json ..
    mv CHARA_PROFILE.json ..
+   mv UnavailableChara.json ..
    ```
 
 ## 配置
@@ -58,9 +59,11 @@ Gitee地址：https://gitee.com/varmixer/gacha
 
 ## 更新日志
 
-### 2022/6/5
-* 更新卡池信息（全新安装的用户首次运行时请发送【更新卡池】）
-* 合并咖啡佬的200井代码
+### 2022/6/7
+* 更新卡池信息
+* 更新200井
+* 兼容最新版[HoshinoBot](https://github.com/Ice-Cirno/HoshinoBot), 包含了`UnavailableChara`
+* 屏蔽远程数据库同步至本地的重复角色
 
 ### 2020/11/9
 * 将角色信息全部给改为json文件存储, 在启动时读取, 并且加入了动态改变角色昵称的方法， 从而在更新角色数据时不会触发全局热重载
