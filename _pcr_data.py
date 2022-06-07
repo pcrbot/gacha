@@ -4,11 +4,13 @@ import json
 
 CHARA_NAME = {}
 CHARA_PROFILE = {}
+UnavailableChara = {}
 
 class CharaMaster:
     def __init__(self) -> None:
         self.chara_name_path = os.path.join(os.path.dirname(__file__), 'CHARA_NAME.json')
         self.chara_profile_path = os.path.join(os.path.dirname(__file__), 'CHARA_PROFILE.json')
+        self.unavailablechara_path = os.path.join(os.path.dirname(__file__), 'UnavailableChara.json')
         self.__load_pcr_data()
         self.__selfcheck()
 
@@ -34,6 +36,13 @@ class CharaMaster:
         for id in chara_profile_str:
             CHARA_PROFILE[int(id)] = chara_profile_str[id]
 
+        # load UnavailableChara
+        with open(self.unavailablechara_path, 'r', encoding='utf-8') as f:
+            unavailablechara_str = json.load(f)
+        global UnavailableChara
+        for id in unavailablechara_str:
+            UnavailableChara[int(id)] = unavailablechara_str[id]
+
 
     def __save_pcr_data(self) -> None:
         # save CHARA_NAME
@@ -43,6 +52,10 @@ class CharaMaster:
         # save CHARA_PROFILE
         with open(self.chara_profile_path, 'w+' , encoding='utf-8') as f:
             json.dump(CHARA_PROFILE, f, indent=4, ensure_ascii=False)
+
+        # save UnavailableChara
+        with open(self.unavailablechara_path, 'w+' , encoding='utf-8') as f:
+            json.dump(UnavailableChara, f, indent=4, ensure_ascii=False)
 
 
     def check_nickname(self, id:int, nickname:str):
@@ -69,4 +82,3 @@ class CharaMaster:
 
 # CHARA_NAME will be loaded while init
 chara_master = CharaMaster()
-

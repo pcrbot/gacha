@@ -26,6 +26,8 @@ online_ver_url = 'https://api.redive.lolikon.icu/gacha/gacha_ver.json'
 online_pool_url = 'https://api.redive.lolikon.icu/gacha/default_gacha.json'
 online_pcr_data_url = 'https://api.redive.lolikon.icu/gacha/unitdata.py'
 
+#屏蔽重复角色
+blacklist = [1908, 1915, 1918, 1194, 1195, 1196, 1197, 1200, 1201, 1202, 1203, 1234, 9401]
 
 async def get_online_pcrdata():
     '''
@@ -61,7 +63,7 @@ async def update_pcrdata():
         return -1
     for id in online_pcrdata:
         # 增加对只有一个key的名字的检查，从而更新之前检查所添加的没有别称的新角色
-        if (id not in _pcr_data.CHARA_NAME or len(_pcr_data.CHARA_NAME[id]) == 1) and id != 9401:
+        if (id not in _pcr_data.CHARA_NAME or len(_pcr_data.CHARA_NAME[id]) == 1) and id not in blacklist:
             hoshino.logger.info(f'已开始更新角色{id}的数据和图标')
             # 由于返回数据可能出现全半角重复, 做一定程度的兼容性处理, 会将所有全角替换为半角, 并移除重复别称
             for i, name in enumerate(online_pcrdata[id]):
@@ -88,7 +90,9 @@ def ids2names(ids: list) -> list:
     '''
     res = []
     for id in ids:
-        if id in _pcr_data.CHARA_NAME:
+        if id in blacklist:
+            pass
+        elif id in _pcr_data.CHARA_NAME:
             res.append(_pcr_data.CHARA_NAME[id][0])
         else:
             hoshino.logger.warning(f'缺少角色{id}的信息, 请注意更新静态资源')
