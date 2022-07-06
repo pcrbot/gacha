@@ -232,8 +232,8 @@ async def gacha_10(bot, ev: CQEvent):
     # silence_time = hiishi * 6 if hiishi < SUPER_LUCKY_LINE else hiishi * 60
 
 
-    res1 = chara.gen_team_pic(result[:5], star_slot_verbose=False)
-    res2 = chara.gen_team_pic(result[5:], star_slot_verbose=False)
+    res1 = await chara.gen_team_pic(result[:5], star_slot_verbose=False)
+    res2 = await chara.gen_team_pic(result[5:], star_slot_verbose=False)
     res = concat_pic([res1, res2])
     res = pic2b64(res)
     res = MessageSegment.image(res)
