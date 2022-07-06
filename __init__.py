@@ -276,7 +276,7 @@ async def gacha_300(bot, ev: CQEvent):
         pics = []
         for i in range(0, lenth, step):
             j = min(lenth, i + step)
-            pics.append(chara.gen_team_pic(res[i:j], star_slot_verbose=False))
+            pics.append(await chara.gen_team_pic(res[i:j], star_slot_verbose=False))
         res = concat_pic(pics)
         res = pic2b64(res)
         res = MessageSegment.image(res)
