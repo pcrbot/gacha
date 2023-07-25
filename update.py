@@ -27,7 +27,7 @@ online_pool_url = 'https://api.redive.lolikon.icu/gacha/default_gacha.json'
 online_pcr_data_url = 'https://api.redive.lolikon.icu/gacha/unitdata.py'
 
 #屏蔽重复角色
-blacklist = [1908, 1915, 1918, 1194, 1195, 1196, 1197, 1200, 1201, 1202, 1203, 1234, 9401]
+blacklist = [1908, 1915, 1918, 1194, 1195, 1196, 1197, 1201, 1202, 1203, 1234, 9401]
 
 async def get_online_pcrdata():
     '''
@@ -77,9 +77,9 @@ async def update_pcrdata():
             m = list(set(online_pcrdata[id]))
             sort_priority(m, group)
             _pcr_data.chara_master.add_chara(id, m)
-            download_chara_icon(id, 6)
-            download_chara_icon(id, 3)
-            download_chara_icon(id, 1)
+            await download_chara_icon(id, 6)
+            await download_chara_icon(id, 3)
+            await download_chara_icon(id, 1)
     # 重载花名册(不会引起全局reload)
     roster.update()
 
